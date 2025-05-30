@@ -15,7 +15,7 @@ composer require inertiajs/inertia-laravel
 php artisan make:view app
 ```
 
-- Root template
+- Root template <br>
 Now in resources/views/app.blade.php setup the root template.
 ```php
 <!DOCTYPE html>
@@ -33,7 +33,7 @@ Now in resources/views/app.blade.php setup the root template.
 ```
 By default, Inertia's Laravel adapter will assume your root template is named app.blade.php. If you would like to use a different root view, you can change it using the Inertia::setRootView() method.
 
-- Middleware
+- Middleware <br>
 ```bash
 php artisan inertia:middleware
 ```
@@ -71,12 +71,12 @@ class EventsController extends Controller
 
 ### Inertia Client Side Setup 
 
-- Install dependencies
+- Install dependencies <br>
 ```bash
 npm install @inertiajs/vue3
 ```
 
-- Initialize the Inertia app
+- Initialize the Inertia app <br>
 
 in resources/js/app.js
 ```js
