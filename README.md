@@ -4,6 +4,9 @@
 ```bash
 composer create-project laravel/laravel laravel_inertia_vue_tutorial
 cd laravel_inertia_vue_tutorial
+```
+- Install vue
+```bash
 npm i vue@latest
 ```
 
