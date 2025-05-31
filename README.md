@@ -99,3 +99,51 @@ createInertiaApp({
 })
 ```
 
+- Make a page
+```bash
+npm install -D @vitejs/plugin-vue
+```
+In vite.config.js
+```js
+import vue from '@vitejs/plugin-vue';
+        vue() // in the plugin array
+```
+Create file resources/js/Pages/Home.vue
+```php
+<template>
+    <div>
+        <h1>Hello</h1>
+    </div>
+</template>
+```
+Now in routes/web.php
+```php
+use Inertia\Inertia;
+
+Route::get('/', function () {
+    return Inertia::render('Home');
+});
+```
+```bash
+npm run build
+php artisan serve
+```
+
+- Install Tailwind
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+in vite.config.js
+```js
+import tailwindcss from '@tailwindcss/vite';
+        tailwindcss(),
+```
+in resources/css/app.css
+```css
+@source '../views';
+```
+in app.js
+```js
+import '../css/app.css';
+```
+
