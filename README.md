@@ -5,20 +5,20 @@
 composer create-project laravel/laravel laravel_inertia_vue_tutorial
 cd laravel_inertia_vue_tutorial
 ```
-- Install vue
+### Install vue
 ```bash
 npm i vue@latest
 ```
 
-### Inertia Server side setup
+## Inertia Server side setup
 
-- Install dependencies
+### Install dependencies
 ```bash
 composer require inertiajs/inertia-laravel
 php artisan make:view app
 ```
 
-- Root template <br>
+### Root template <br>
 Now in resources/views/app.blade.php setup the root template.
 ```php
 <!DOCTYPE html>
@@ -36,7 +36,7 @@ Now in resources/views/app.blade.php setup the root template.
 ```
 By default, Inertia's Laravel adapter will assume your root template is named app.blade.php. If you would like to use a different root view, you can change it using the Inertia::setRootView() method.
 
-- Middleware <br>
+### Middleware <br>
 ```bash
 php artisan inertia:middleware
 ```
@@ -52,7 +52,7 @@ use App\Http\Middleware\HandleInertiaRequests;
 })
 ```
 
-- Creating Responses (Ignore it)
+### Creating Responses (Ignore it)
 ```php
 use Inertia\Inertia;
 
@@ -72,14 +72,14 @@ class EventsController extends Controller
 }
 ```
 
-### Inertia Client Side Setup 
+## Inertia Client Side Setup 
 
-- Install dependencies <br>
+### Install dependencies 
 ```bash
 npm install @inertiajs/vue3
 ```
 
-- Initialize the Inertia app <br>
+### Initialize the Inertia app 
 
 in resources/js/app.js
 ```js
@@ -99,7 +99,7 @@ createInertiaApp({
 })
 ```
 
-- Make a page
+### Make a page
 ```bash
 npm install -D @vitejs/plugin-vue
 ```
@@ -129,7 +129,7 @@ npm run build
 php artisan serve
 ```
 
-- Install Tailwind
+### Install Tailwind
 ```bash
 npm install tailwindcss @tailwindcss/vite
 ```
@@ -147,3 +147,45 @@ in app.js
 import '../css/app.css';
 ```
 
+## Pages
+
+### Creating pages
+Inertia pages are simply JavaScript components. Pages receive data from our application's controllers as props.
+
+create resources/js/Pages/About.vue
+```vue
+<script setup>
+defineProps({
+    user: String // recieve data
+})
+</script>
+
+<template>
+    <div>
+        <h1>About {{ user }}</h1>
+    </div>
+</template>
+```
+
+### Routes
+We can render that page by returning an inertia response in routes/web.php. We can use any of the three following methods.
+```php
+// Method 1
+Route::get('/about', function() {
+    return Inertia::render('About', [
+        'user' => 'Tameem' // props
+    ]);
+});
+
+// Method 2
+Route::get('/about', function () {
+    return inertia('About', [
+        'user' => 'Tameem' // props
+    ]);
+});
+
+// Method 3
+Route::inertia('/about', 'About', [
+    'user' => 'Tameem' // props
+]);
+```
