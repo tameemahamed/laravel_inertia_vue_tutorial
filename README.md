@@ -19,7 +19,7 @@ php artisan make:view app
 ```
 
 ### Root template <br>
-Now in resources/views/app.blade.php setup the root template.
+Now in `resources/views/app.blade.php` setup the root template.
 ```php
 <!DOCTYPE html>
 <html>
@@ -103,12 +103,12 @@ createInertiaApp({
 ```bash
 npm install -D @vitejs/plugin-vue
 ```
-In vite.config.js
+In `vite.config.js`
 ```js
 import vue from '@vitejs/plugin-vue';
         vue() // in the plugin array
 ```
-Create file resources/js/Pages/Home.vue
+Create file `resources/js/Pages/Home.vue`
 ```php
 <template>
     <div>
@@ -116,7 +116,7 @@ Create file resources/js/Pages/Home.vue
     </div>
 </template>
 ```
-Now in routes/web.php
+Now in `routes/web.php`
 ```php
 use Inertia\Inertia;
 
@@ -133,12 +133,12 @@ php artisan serve
 ```bash
 npm install tailwindcss @tailwindcss/vite
 ```
-in vite.config.js
+in `vite.config.js`
 ```js
 import tailwindcss from '@tailwindcss/vite';
         tailwindcss(),
 ```
-in resources/css/app.css
+in `resources/css/app.css`
 ```css
 @source '../views';
 ```
@@ -152,7 +152,7 @@ import '../css/app.css';
 ### Creating pages
 Inertia pages are simply JavaScript components. Pages receive data from our application's controllers as props.
 
-create resources/js/Pages/About.vue
+create `resources/js/Pages/About.vue`
 ```vue
 <script setup>
 defineProps({
@@ -191,7 +191,7 @@ Route::inertia('/about', 'About', [
 ```
 
 ## Layouts
-create resource/js/Layouts/Layout.vue
+create `resource/js/Layouts/Layout.vue`
 ```vue
 <template>
     <div>
@@ -212,7 +212,7 @@ create resource/js/Layouts/Layout.vue
 
 Now add that Layout in Home and About page
 
-```vue Home.vue
+```vue
 <script setup>
 import Layout from '../Layouts/Layout.vue';
 </script>
@@ -223,7 +223,7 @@ import Layout from '../Layouts/Layout.vue';
     </Layout>
 </template>
 ```
-```vue About.vue
+```vue 
 <script setup>
 import Layout from '../Layouts/Layout.vue'
 defineProps({
@@ -238,7 +238,7 @@ defineProps({
 </template>
 ```
 
-But everytime importing that 'Layout' doesn't seems so efficient. So for Efficiency go to app.js and add the followings
+But everytime importing that 'Layout' doesn't seems so efficient. So for Efficiency go to `app.js` and add the followings
 
 ```js
 import Layout from './Layouts/Layout.vue';
@@ -251,9 +251,9 @@ import Layout from './Layouts/Layout.vue';
     return page
   }
 ```
-make changes in Home.vue and About.vue
+make changes in `Home.vue` and `About.vue`
 
-```vue Home.vue
+```vue
 <script setup>
 // just simple get rid of that import Layout everytime
 </script>
@@ -262,7 +262,7 @@ make changes in Home.vue and About.vue
         <h1>Hello</h1>
 </template>
 ```
-```vue About.vue
+```vue 
 <script setup>
 import GreenNav from '../Layouts/GreenNav.vue';
 
@@ -282,7 +282,7 @@ defineOptions({ layout: GreenNav })
 
 ## Link Element
 To create links to other pages within an Inertia app, you will typically use the Inertia `<Link>` component. This component is a light wrapper around a standard anchor `<a>` link that intercepts click events and prevents full page reloads. 
-in Layout.vue
+in `Layout.vue`
 ```vue
 <script setup>
 import { Link } from '@inertiajs/vue3';
@@ -296,7 +296,7 @@ import { Link } from '@inertiajs/vue3';
 Since Inertia powered JavaScript apps are rendered within the document `<body>`, they are unable to render markup to the document `<head>`, as it's outside of their scope. To help with this, Inertia ships with a `<Head>` component which can be used to set the page `<title>`, `<meta>` tags, and other `<head>` elements.
 
 ### Title Tag
-in Layout.vue
+in `Layout.vue`
 ```vue
 <script setup>
 import { Link,Head } from '@inertiajs/vue3';
@@ -319,7 +319,7 @@ in app.js add the following
 ```js
   title: (title) => `My App ${title}`,
 ```
-in About.vue
+in `About.vue`
 ```vue
 <script setup>
 import { Head } from '@inertiajs/vue3';
@@ -337,7 +337,7 @@ defineProps({
 now it will show `My App - About` in the page title upon rendering that page.
 
 ### Meta Tag
-in Layout.vue
+in `Layout.vue`
 ```vue
 <!-- rest of the code -->
     <Head>
@@ -348,7 +348,7 @@ in Layout.vue
     </Head>
 <!-- rest of the code -->
 ```
-Also in Home.vue
+Also in `Home.vue`
 ```vue
 <!-- rest of the code -->
         <Head>
