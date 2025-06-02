@@ -189,3 +189,93 @@ Route::inertia('/about', 'About', [
     'user' => 'Tameem' // props
 ]);
 ```
+
+## Layouts
+create resource/js/Layouts/Layout.vue
+```vue
+<template>
+    <div>
+        <header class="bg-indigo-500 text-white">
+            <nav class="flex items-center justify-between p-4 max-w-screen-lg mx-auto">
+                <div>
+                    <a href="/">Home</a>
+                    <a href="/about">About</a>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <slot />
+        </main>
+    </div>
+</template>
+```
+
+Now add that Layout in Home and About page
+
+```vue Home.vue
+<script setup>
+import Layout from '../Layouts/Layout.vue';
+</script>
+
+<template>
+    <Layout>
+        <h1>In home page</h1>
+    </Layout>
+</template>
+```
+```vue About.vue
+<script setup>
+import Layout from '../Layouts/Layout.vue'
+defineProps({
+    user: String // get the props
+})
+</script>
+
+<template>
+    <Layout>
+        <h1>About {{ user }}</h1>
+    </Layout>
+</template>
+```
+
+But everytime importing that 'Layout' doesn't seems so efficient. So for Efficiency go to app.js and add the followings
+
+```js
+import Layout from './Layouts/Layout.vue';
+
+
+  resolve: name => {
+    const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
+    let page = pages[`./Pages/${name}.vue`]
+    page.default.layout = page.default.layout || Layout
+    return page
+  }
+```
+make changes in Home.vue and About.vue
+
+```vue Home.vue
+<script setup>
+// just simple get rid of that import Layout everytime
+</script>
+
+<template>
+        <h1>Hello</h1>
+</template>
+```
+```vue About.vue
+<script setup>
+import GreenNav from '../Layouts/GreenNav.vue';
+
+defineProps({
+    user: String // get the props
+})
+
+// in case you want to use some other Navigation bar
+defineOptions({ layout: GreenNav })
+
+</script>
+
+<template>
+        <h1>About {{ user }}</h1>
+</template>
+```
