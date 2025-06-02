@@ -279,3 +279,87 @@ defineOptions({ layout: GreenNav })
         <h1>About {{ user }}</h1>
 </template>
 ```
+
+## Link Element
+To create links to other pages within an Inertia app, you will typically use the Inertia `<Link>` component. This component is a light wrapper around a standard anchor `<a>` link that intercepts click events and prevents full page reloads. 
+in Layout.vue
+```vue
+<script setup>
+import { Link } from '@inertiajs/vue3';
+</script>
+<!-- rest of the code -->
+                    <Link href="/">Home</Link>
+                    <Link href="/about">About</Link>
+<!-- rest of the code -->
+```
+## Head Elements
+Since Inertia powered JavaScript apps are rendered within the document `<body>`, they are unable to render markup to the document `<head>`, as it's outside of their scope. To help with this, Inertia ships with a `<Head>` component which can be used to set the page `<title>`, `<meta>` tags, and other `<head>` elements.
+
+### Title Tag
+in Layout.vue
+```vue
+<script setup>
+import { Link,Head } from '@inertiajs/vue3';
+</script>
+<!-- rest of the code -->
+    <Head>
+        <title>My App</title>
+    </Head>
+<!-- rest of the code -->
+```
+Now we can see `My App` in the title of every pages.
+Also we can use a title shorthand like the following
+```vue
+<Head title="My App" />
+```
+- Title callback
+We can globally modify the page `<title>` using the title callback in the createInertiaApp setup method. Typically, this method is invoked in our application's main JavaScript file. A common use case for the title callback is automatically adding an app name before or after each page title.
+
+in app.js add the following
+```js
+  title: (title) => `My App ${title}`,
+```
+in About.vue
+```vue
+<script setup>
+import { Head } from '@inertiajs/vue3';
+defineProps({
+    user: String // get the props
+})
+</script>
+
+<template>
+    <Head title=" - About"/>
+    
+    <h1>About {{ user }}</h1>
+</template>
+```
+now it will show `My App - About` in the page title upon rendering that page.
+
+### Meta Tag
+in Layout.vue
+```vue
+<!-- rest of the code -->
+    <Head>
+        <title>My App</title>
+        <meta name="description" 
+              content="This is Layout meta tag"
+        >
+    </Head>
+<!-- rest of the code -->
+```
+Also in Home.vue
+```vue
+<!-- rest of the code -->
+        <Head>
+                <title>Home</title>
+                <meta name="description" 
+                        content="This is home page meta tag"
+                >
+        </Head>
+<!-- rest of the code -->
+```
+now upon inspect elements in `Homepage` we will see two meta tags.
+
+To show only the homepage meta tag add `head-key="description"` inside the meta tag in both 'Layout.vue' and `Home.vue`
+
