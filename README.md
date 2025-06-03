@@ -363,3 +363,122 @@ now upon inspect elements in `Homepage` we will see two meta tags.
 
 To show only the homepage meta tag add `head-key="description"` inside the meta tag in both 'Layout.vue' and `Home.vue`
 
+To get rid of the `Head` and `Link` import in every pages, we can declear it globally
+in `app.js`
+```js
+import { Head, Link } from '@inertiajs/vue3'
+
+// rest of the code
+  setup({ el, App, props, plugin }) {
+    createApp({ render: () => h(App, props) })
+      .use(plugin)
+      .component('Link', Link)
+      .component('Head', Head)
+      .mount(el)
+  },
+// rest of the code
+```
+
+## Progress indicators
+Add some delay for the Home page
+
+in `web.php`
+```php
+Route::get('/', function () {
+    sleep(2); // will make a 2 seconds delay
+    return Inertia::render('Home');
+});
+```
+copy and paste this in `app.js`
+```js
+createInertiaApp({
+  progress: {
+    // The delay after which the progress bar will appear, in milliseconds...
+    delay: 250, // you may remove this
+
+    // The color of the progress bar...
+    color: '#29d',
+
+    // Whether to include the default NProgress styles...
+    includeCSS: true,
+
+    // Whether the NProgress spinner will be shown...
+    showSpinner: false, // after changing it to true, we can see a loading type thing
+  },
+  // ...
+})
+```
+
+## Shared data
+Sometimes you need to access specific pieces of data on numerous pages within your application. For example, you may need to display the current user in the site header. Passing this data manually in each response across your entire application is cumbersome. Thankfully, there is a better option: shared data.
+
+### Sharing data
+Inertia's server-side adapters all provide a method of making shared data available for every request. This is typically done outside of your controllers. Shared data will be automatically merged with the page props provided in your controller.
+
+In Laravel applications, this is typically handled by the `HandleInertiaRequests` middleware that is automatically installed when installing the server-side adapter.
+
+in `app/http/middleware/HandleInertiaRequests.php`
+```php
+class HandleInertiaRequests extends Middleware
+{
+    public function share(Request $request)
+    {
+        return array_merge(parent::share($request), [
+            // Synchronously...
+            'appName' => config('app.name'),
+
+            // Lazily...
+            'auth.user' => fn () => $request->user()
+                ? $request->user()->only('id', 'name', 'email')
+                : null,
+        ]);
+
+        // or use the following
+        return [
+            ...parent::share($request),
+            'user' => 'Tameem'
+            
+            //
+        ];
+    }
+}
+```
+Alternatively, you can manually share data using the `Inertia::share` method.
+```php
+use Inertia\Inertia;
+
+// Synchronously...
+Inertia::share('appName', config('app.name'));
+
+// Lazily...
+Inertia::share('user', fn (Request $request) => $request->user()
+    ? $request->user()->only('id', 'name', 'email')
+    : null
+);
+```
+
+### Accessing shared data
+Once you have shared the data server-side, you will be able to access it within any of your pages or components. Here's an example of how to access shared data in a layout component.
+
+```vue
+<script setup>
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
+
+const user = computed(() => page.props.auth.user)
+</script>
+
+<template>
+  <main>
+    <header>
+      You are logged in as: {{ user.name }}
+    </header>
+    <article>
+      <slot />
+    </article>
+  </main>
+</template>
+```
+
