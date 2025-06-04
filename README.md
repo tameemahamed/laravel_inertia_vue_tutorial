@@ -597,10 +597,96 @@ In `Layout.vue` add these also
 ```vue
                     <Link :href="route('register')">Register</Link>
 ```
-In 'web.php' add that route
+In `web.php` add that route
 ```php
 Route::inertia('/register', 'Auth/Register')
 ->name('register');
 ```
 
+## Inertia form helper
+```bash
+php artisan make:controller AuthController
+```
+
+paste it in `app/http/controllers/AuthController.php`
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AuthController extends Controller
+{
+    //
+    public function register(Request $request){
+        // Validate
+        $fields = $request->validate([
+            'name' => ['required', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed']
+        ]);
+
+        // Register
+        $user = User::create($fields);
+
+        // Login 
+        Auth::login($user);
+
+        // Redirect 
+        return redirect()->route('home');
+
+    }
+}
+```
+
+In `web.php`
+```php
+Route::post('/register', [AuthController::class, 'register']);
+```
+
+### use `router` method
+
+In `Register.vue`
+```vue
+<script setup>
+import { router } from '@inertiajs/vue3';
+const submit = () => {
+    router.post('/register', form)
+}
+</script>
+
+<!-- also we can add these to show error message -->
+                <small>{{ form.errors.name }}</small>
+
+```
+
+### use form helper method
+
+in `Register.vue`
+
+```vue
+<script setup>
+import { useForm }from '@inertiajs/vue3';
+
+const form = useForm({
+    name: null,
+    email: null,
+    password: null,
+    password_confirmation: null
+})
+
+const submit = () => {
+    form.post('/register', {
+        onError: () => {
+            form.reset('password', 'password_confirmation')
+        }
+    })
+}
+</script>
+```
+
+the code are pretty self-explanatory.
 
