@@ -520,18 +520,87 @@ Now in `Layout.vue` edit these
         </div>
 ```
 
+## Scroll Management
 
+add these in `Home.vue`
+```vue
+        <Link class="mt-[1400px] block" href="/">
+                Refresh
+        </Link>
+```
+Now you can see a `Refresh` button in the bottom of the page. Upon clicking this it will take you back to the top.
 
+to resolve this, just simply add `preserve-scroll` in `Link` element.
+```vue
+        <Link class="mt-[1400px] block" href="/" preserve-scroll>
+            Refresh
+        </Link>
+```
 
+## Forms
+Create a registration form in `resources/js/Pages/Register.vue`
+```vue
+<script setup>
+import { reactive } from 'vue';
 
+const form = reactive({
+    name: null,
+    email: null,
+    password: null,
+    password_confirmation: null
+})
 
+const submit = () => {
+    console.log(form)
+}
+</script>
 
+<template>
+    <Head title="| Register" />
+    <h1 class="title">Register a new account</h1>
 
+    <div class="w-2/4 mx-auto">
+        <form @submit.prevent="submit">
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                <input v-model="form.name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" type="text" />
+            </div>
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+                <input v-model="form.email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" type="text" />
+            </div>
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                <input v-model="form.password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" type="password" />
+            </div>
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Confirm password</label>
+                <input v-model="form.password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" type="password" />
+            </div>
 
-
-
-
-
-
+            <div class="mt-6 flex items-center justify-between">
+                <p class="text-slate-600">
+                    Already a user?
+                    <a href="#" class="text-blue-600 hover:text-blue-800 hover:underline ml-1">
+                        Login
+                    </a>
+                </p>
+                <button class="primary-btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+</template>
+```
+In `Layout.vue` add these also
+```vue
+                    <Link :href="route('register')">Register</Link>
+```
+In 'web.php' add that route
+```php
+Route::inertia('/register', 'Auth/Register')
+->name('register');
+```
 
 
