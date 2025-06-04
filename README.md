@@ -482,3 +482,56 @@ const user = computed(() => page.props.auth.user)
 </template>
 ```
 
+## Named Route
+Ziggy provides a JavaScript `route()` function that works like Laravel's, making it a breeze to use your named Laravel routes in JavaScript.
+### Installation
+Install Ziggy in your Laravel app with Composer:
+```bash
+composer require tightenco/ziggy
+```
+
+### Setup
+import it in `app.js`
+```js
+import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+setup({ el, App, props, plugin }) {
+    createApp({ render: () => h(App, props) })
+      .use(ZiggyVue) // add it
+  },
+```
+in `app.blade.php` add `@routes` inside the `head` element
+
+### Usage
+Now we need to name our route in `web.php`
+```php
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('home');
+
+Route::inertia('/about', 'About', [
+    'user' => 'Tameem' 
+])->name('about');
+```
+Now in `Layout.vue` edit these
+```vue
+        <div class="space-x-6">
+            <Link :href="route('home')">Home</Link>
+            <Link :href="route('about')">About</Link>
+        </div>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
